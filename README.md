@@ -6,6 +6,24 @@
 
 ---
 
+## 下载即用（Windows x64 免安装）
+
+不想编译就直接下打好的包，**已内置 Qt 运行库，解压双击即可运行**：
+
+| 下载 | 大小 | 说明 |
+|---|---|---|
+| [TcpServer-1.0.0-win64.zip](https://github.com/carson631/TcpServer-Client/releases/download/v1.0.0/TcpServer-1.0.0-win64.zip) | 23.5 MB | 服务端，默认监听 `6666` |
+| [TcpClient-1.0.0-win64.zip](https://github.com/carson631/TcpServer-Client/releases/download/v1.0.0/TcpClient-1.0.0-win64.zip) | 23.4 MB | 客户端，可多开（每实例一个账号） |
+
+全部发布版本见 [Releases](https://github.com/carson631/TcpServer-Client/releases)。
+
+快速开始：解压服务端 → 双击 `TCPServer.exe`（防火墙弹窗选「允许」）→ 解压客户端 → 双击 `TCPClient.exe` → IP 填 `127.0.0.1`、端口 `6666` → 连接 → 注册 / 登录 → 互加好友 → 私聊。
+
+> 国内网络如果打不开下载链接，在地址前加 `https://gh-proxy.com/` 即可，例如：
+> `https://gh-proxy.com/https://github.com/carson631/TcpServer-Client/releases/download/v1.0.0/TcpClient-1.0.0-win64.zip`
+
+---
+
 ## 界面预览
 
 **服务端 · TCP 服务器管理控制台**（在线客户端、登录用户、消息记录、用户管理）
