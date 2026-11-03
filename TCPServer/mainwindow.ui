@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>880</width>
+    <height>640</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>760</width>
+    <height>580</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>TCP服务器</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QMainWindow, #centralwidget { background: #f5f6fa; }
+QLabel#titleLabel { font-size: 16pt; font-weight: bold; color: #2f54eb; padding: 2px; }
+QGroupBox {
+  font-weight: bold;
+  color: #1d39c4;
+  border: 1px solid #d6d9e4;
+  border-radius: 8px;
+  margin-top: 10px;
+  background: #ffffff;
+}
+QGroupBox::title {
+  subcontrol-origin: margin;
+  left: 12px;
+  padding: 0 4px;
+}
+QPushButton {
+  background: #2f54eb;
+  color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  padding: 6px 16px;
+  font-weight: bold;
+}
+QPushButton:hover { background: #4062f5; }
+QPushButton:pressed { background: #1d39c4; }
+QPushButton:disabled { background: #c3c9e8; color: #f4f5fb; }
+QPushButton#deleteUserButton { background: #d4380d; }
+QPushButton#deleteUserButton:hover { background: #e64a19; }
+QLineEdit, QTextEdit, QListWidget {
+  border: 1px solid #d6d9e4;
+  border-radius: 5px;
+  padding: 3px 5px;
+  background: #ffffff;
+  selection-background-color: #2f54eb;
+}
+QLineEdit:focus, QTextEdit:focus, QListWidget:focus { border: 1px solid #2f54eb; }
+QListWidget::item { padding: 4px; }
+QListWidget::item:selected { background: #e6ebff; color: #1d39c4; }
+QTextEdit { font-family: &quot;Microsoft YaHei&quot;; font-size: 10pt; }
+QListWidget#userList { font-weight: normal; color: #333333; }</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="mainLayout" stretch="0,0,1">
+    <property name="leftMargin">
+     <number>14</number>
+    </property>
+    <property name="topMargin">
+     <number>10</number>
+    </property>
+    <property name="rightMargin">
+     <number>14</number>
+    </property>
+    <property name="bottomMargin">
+     <number>12</number>
+    </property>
+    <property name="spacing">
+     <number>10</number>
+    </property>
+    <item>
+     <widget class="QLabel" name="titleLabel">
+      <property name="text">
+       <string>TCP 服务器管理控制台</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="statusRow" stretch="1,1">
+      <property name="spacing">
+       <number>10</number>
+      </property>
+      <item>
+       <widget class="QGroupBox" name="clientGroup">
+        <property name="title">
+         <string>在线客户端（IP:端口）</string>
+        </property>
+        <layout class="QVBoxLayout" name="clientLayout">
+         <item>
+          <widget class="QTextEdit" name="clientsTextEdit">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>110</height>
+            </size>
+           </property>
+           <property name="readOnly">
+            <bool>true</bool>
+           </property>
+           <property name="placeholderText">
+            <string>暂无客户端连接</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item>
+       <widget class="QGroupBox" name="userGroup">
+        <property name="title">
+         <string>登录用户（用户名 IP:端口）</string>
+        </property>
+        <layout class="QVBoxLayout" name="userLayout">
+         <item>
+          <widget class="QTextEdit" name="usersTextEdit">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>110</height>
+            </size>
+           </property>
+           <property name="readOnly">
+            <bool>true</bool>
+           </property>
+           <property name="placeholderText">
+            <string>暂无用户登录</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="bottomRow" stretch="2,1">
+      <property name="spacing">
+       <number>10</number>
+      </property>
+      <item>
+       <widget class="QGroupBox" name="msgGroup">
+        <property name="title">
+         <string>消息记录（所有用户发出的消息）</string>
+        </property>
+        <layout class="QVBoxLayout" name="msgLayout">
+         <item>
+          <widget class="QTextEdit" name="msgLineEdit">
+           <property name="readOnly">
+            <bool>true</bool>
+           </property>
+           <property name="placeholderText">
+            <string>等待客户端消息...</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item>
+       <widget class="QGroupBox" name="manageGroup">
+        <property name="title">
+         <string>用户管理（管理员）</string>
+        </property>
+        <layout class="QVBoxLayout" name="manageLayout" stretch="0,0,1,0">
+         <property name="spacing">
+          <number>8</number>
+         </property>
+         <item>
+          <layout class="QGridLayout" name="manageGrid" columnstretch="0,1">
+           <property name="horizontalSpacing">
+            <number>8</number>
+           </property>
+           <property name="verticalSpacing">
+            <number>8</number>
+           </property>
+           <item row="0" column="0">
+            <widget class="QLabel" name="regUserLabel">
+             <property name="text">
+              <string>用户名：</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QLineEdit" name="regUserEdit">
+             <property name="placeholderText">
+              <string>新用户的用户名</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="regPassLabel">
+             <property name="text">
+              <string>密码：</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QLineEdit" name="regPassEdit">
+             <property name="echoMode">
+              <enum>QLineEdit::Password</enum>
+             </property>
+             <property name="placeholderText">
+              <string>新用户的密码</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <widget class="QPushButton" name="addUserButton">
+           <property name="text">
+            <string>添加用户</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QListWidget" name="userList">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>90</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="deleteUserButton">
+           <property name="text">
+            <string>删除选中的用户</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>880</width>
+     <height>22</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

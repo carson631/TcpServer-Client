@@ -1,0 +1,380 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>820</width>
+    <height>640</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>720</width>
+    <height>580</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>TCP客户端</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QMainWindow, #centralwidget { background: #f5f6fa; }
+QLabel#label_3 { font-size: 16pt; font-weight: bold; color: #2f54eb; padding: 2px; }
+QGroupBox {
+  font-weight: bold;
+  color: #1d39c4;
+  border: 1px solid #d6d9e4;
+  border-radius: 8px;
+  margin-top: 10px;
+  background: #ffffff;
+}
+QGroupBox::title {
+  subcontrol-origin: margin;
+  left: 12px;
+  padding: 0 4px;
+}
+QPushButton {
+  background: #2f54eb;
+  color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  padding: 6px 16px;
+  font-weight: bold;
+}
+QPushButton:hover { background: #4062f5; }
+QPushButton:pressed { background: #1d39c4; }
+QPushButton:disabled { background: #c3c9e8; color: #f4f5fb; }
+QLineEdit, QTextEdit, QListWidget {
+  border: 1px solid #d6d9e4;
+  border-radius: 5px;
+  padding: 3px 5px;
+  background: #ffffff;
+  selection-background-color: #2f54eb;
+}
+QLineEdit:focus, QTextEdit:focus, QListWidget:focus { border: 1px solid #2f54eb; }
+QListWidget::item { padding: 4px; }
+QListWidget::item:selected { background: #e6ebff; color: #1d39c4; }
+QTextEdit { font-family: &quot;Microsoft YaHei&quot;; font-size: 10pt; }</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="mainLayout" stretch="0,0,0,1,0">
+    <property name="leftMargin">
+     <number>14</number>
+    </property>
+    <property name="topMargin">
+     <number>10</number>
+    </property>
+    <property name="rightMargin">
+     <number>14</number>
+    </property>
+    <property name="bottomMargin">
+     <number>12</number>
+    </property>
+    <property name="spacing">
+     <number>10</number>
+    </property>
+    <item>
+     <widget class="QLabel" name="label_3">
+      <property name="text">
+       <string>TCP 聊天客户端</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QGroupBox" name="connGroup">
+      <property name="title">
+       <string>连接与账号</string>
+      </property>
+      <layout class="QGridLayout" name="connGrid" columnstretch="0,1,0,1">
+       <property name="horizontalSpacing">
+        <number>10</number>
+       </property>
+       <property name="verticalSpacing">
+        <number>8</number>
+       </property>
+       <item row="0" column="0">
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>IP：</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QLineEdit" name="ipEdit">
+         <property name="text">
+          <string>127.0.0.1</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="2">
+        <widget class="QLabel" name="userLabel">
+         <property name="text">
+          <string>用户名：</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="3">
+        <widget class="QLineEdit" name="userEdit">
+         <property name="placeholderText">
+          <string>用户名</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_2">
+         <property name="text">
+          <string>端口：</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QLineEdit" name="portEdit">
+         <property name="text">
+          <string>6666</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="2">
+        <widget class="QLabel" name="passLabel">
+         <property name="text">
+          <string>密码：</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="3">
+        <widget class="QLineEdit" name="passEdit">
+         <property name="echoMode">
+          <enum>QLineEdit::Password</enum>
+         </property>
+         <property name="placeholderText">
+          <string>密码</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0" colspan="4">
+        <layout class="QHBoxLayout" name="connBtnRow" stretch="0,0,1,0,0,0">
+         <item>
+          <widget class="QPushButton" name="connectButton">
+           <property name="text">
+            <string>连接</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="cancelButton">
+           <property name="text">
+            <string>断开</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="connSpacer">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>10</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QPushButton" name="registerButton">
+           <property name="text">
+            <string>注册</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="loginButton">
+           <property name="text">
+            <string>登录</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="logoutButton">
+           <property name="text">
+            <string>登出</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="friendRow" stretch="3,2">
+      <property name="spacing">
+       <number>10</number>
+      </property>
+      <item>
+       <widget class="QGroupBox" name="friendGroup">
+        <property name="title">
+         <string>好友列表（点选一个好友作为聊天对象）</string>
+        </property>
+        <layout class="QVBoxLayout" name="friendLayout">
+         <property name="spacing">
+          <number>8</number>
+         </property>
+         <item>
+          <widget class="QListWidget" name="friendList">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>130</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="addFriendRow" stretch="1,0">
+           <property name="spacing">
+            <number>8</number>
+           </property>
+           <item>
+            <widget class="QLineEdit" name="addFriendEdit">
+             <property name="placeholderText">
+              <string>输入好友用户名</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="addFriendButton">
+             <property name="text">
+              <string>添加好友</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item>
+       <widget class="QGroupBox" name="reqGroup">
+        <property name="title">
+         <string>好友请求（选中后同意/拒绝）</string>
+        </property>
+        <layout class="QVBoxLayout" name="reqLayout">
+         <property name="spacing">
+          <number>8</number>
+         </property>
+         <item>
+          <widget class="QListWidget" name="requestList">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>130</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="reqBtnRow">
+           <item>
+            <widget class="QPushButton" name="agreeButton">
+             <property name="text">
+              <string>同意</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="refuseButton">
+             <property name="text">
+              <string>拒绝</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="reqSpacer">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>10</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <widget class="QGroupBox" name="chatGroup">
+      <property name="title">
+       <string>聊天记录</string>
+      </property>
+      <layout class="QVBoxLayout" name="chatLayout">
+       <item>
+        <widget class="QTextEdit" name="recvEdit">
+         <property name="readOnly">
+          <bool>true</bool>
+         </property>
+         <property name="placeholderText">
+          <string>选中好友后发消息；收到的私聊消息显示在这里</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="msgRow" stretch="0,1,0">
+      <property name="spacing">
+       <number>8</number>
+      </property>
+      <item>
+       <widget class="QLabel" name="label_4">
+        <property name="text">
+         <string>消息：</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="msgEdit">
+        <property name="placeholderText">
+         <string>输入内容，点「发送」发给左侧选中的好友</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="sendButton">
+        <property name="text">
+         <string>发送</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>820</width>
+     <height>22</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

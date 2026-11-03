@@ -1,0 +1,43 @@
+# 构建产物
+build/
+build-*/
+cmake-build-*/
+out/
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+Makefile
+*.ninja
+.ninja_*
+compile_commands.json
+
+# Qt Creator / IDE
+.qtcreator/
+*.user
+*.user.*
+.vscode/
+.vs/
+
+# 编译中间件与二进制
+*.o
+*.obj
+*.exe
+*.dll
+*.a
+*.lib
+*.pdb
+*.ilk
+moc_*.cpp
+qrc_*.cpp
+ui_*.h
+qmake_qmake_immediate.qrc
+*_autogen/
+
+# 运行时数据（不该入库）
+users.txt
+friends.txt
+*.db
+
+# 系统垃圾
+Thumbs.db
+.DS_Store
