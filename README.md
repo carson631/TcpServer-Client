@@ -12,7 +12,7 @@
 
 | 下载 | 大小 | 说明 |
 |---|---|---|
-| [TcpServer-1.1.0-win64.zip](https://github.com/carson631/TcpServer-Client/releases/download/v1.1.0/TcpServer-1.1.0-win64.zip) | ~25 MB | 服务端 **v1.1.0**：多线程 + MySQL 持久化 |
+| [TcpServer-1.1.0-win64.zip](https://github.com/carson631/TcpServer-Client/releases/download/v1.1.0/TcpServer-1.1.0-win64.zip) | 27.3 MB | 服务端 **v1.1.0**：多线程 + MySQL 持久化 |
 | [TcpServer-1.0.0-win64.zip](https://github.com/carson631/TcpServer-Client/releases/download/v1.0.0/TcpServer-1.0.0-win64.zip) | 23.5 MB | 服务端 v1.0.0（旧版，文件存账号） |
 | [TcpClient-1.0.0-win64.zip](https://github.com/carson631/TcpServer-Client/releases/download/v1.0.0/TcpClient-1.0.0-win64.zip) | 23.4 MB | 客户端，可多开（每实例一个账号） |
 
