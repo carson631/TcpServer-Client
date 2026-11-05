@@ -12,7 +12,8 @@
 
 | 下载 | 大小 | 说明 |
 |---|---|---|
-| [TcpServer-1.0.0-win64.zip](https://github.com/carson631/TcpServer-Client/releases/download/v1.0.0/TcpServer-1.0.0-win64.zip) | 23.5 MB | 服务端，默认监听 `6666` |
+| [TcpServer-1.1.0-win64.zip](https://github.com/carson631/TcpServer-Client/releases/download/v1.1.0/TcpServer-1.1.0-win64.zip) | ~25 MB | 服务端 **v1.1.0**：多线程 + MySQL 持久化 |
+| [TcpServer-1.0.0-win64.zip](https://github.com/carson631/TcpServer-Client/releases/download/v1.0.0/TcpServer-1.0.0-win64.zip) | 23.5 MB | 服务端 v1.0.0（旧版，文件存账号） |
 | [TcpClient-1.0.0-win64.zip](https://github.com/carson631/TcpServer-Client/releases/download/v1.0.0/TcpClient-1.0.0-win64.zip) | 23.4 MB | 客户端，可多开（每实例一个账号） |
 
 全部发布版本见 [Releases](https://github.com/carson631/TcpServer-Client/releases)。
@@ -41,11 +42,17 @@
 ```
 TcpServer-Client/
 ├── docs/                 # 界面截图
-├── TCPServer/            # 服务端：监听 6666，管理连接/账号/好友/消息
-│   ├── CMakeLists.txt
+├── TCPServer/            # 服务端 v1.1.0：监听 6666，MySQL 持久化
+│   ├── CMakeLists.txt    #   构建后自动部署 MySQL 运行时（见文件内注释）
 │   ├── main.cpp
 │   ├── mainwindow.h/.cpp/.ui
-│   └── TCPServer_zh_CN.ts
+│   ├── mythread.h/.cpp       # 每连接一个工作线程
+│   ├── mytcpserver.h/.cpp    # 重写 incomingConnection 只抛描述符
+│   ├── database.h/.cpp       # Database 单例：MySQL 连接 + 预处理语句
+│   ├── sql/schema.sql        # 建库建表 + 应用账号
+│   ├── tools/                # 数据库排障小程序
+│   ├── docs/                 # 服务端截图
+│   └── README.md             # 服务端详细说明（含 "Driver not loaded" 排障）
 └── TCPClient/            # 客户端：连接、注册登录、好友、私聊
     ├── CMakeLists.txt
     ├── main.cpp
@@ -60,13 +67,13 @@ TcpServer-Client/
 
 | 功能 | 说明 |
 |---|---|
-| 多客户端接入 | `QList<QTcpSocket*>` 保存全部连接，`while(hasPendingConnections())` 一次取完积压连接 |
+| 多线程接入 | 重写 `incomingConnection()` 只抛 socket 描述符，**每个连接一个工作线程**（`MyThread::run()` 阻塞轮询，跨线程发送走互斥队列） |
+| MySQL 持久化 | 用户 / 消息 / 好友关系存 MySQL（默认 `192.168.5.50:3306/tcp_chat`，界面可改，`QSettings` 记忆）；连不上自动重试 6 次×5s |
 | 在线客户端 / 登录用户 | 两个只读区实时刷新 `IP:端口` 与 `用户名 (IP:端口)` |
-| 账号体系 | `users.txt` 持久化，密码只存 **SHA-256** 摘要，不存明文 |
-| 好友关系 | `friends.txt` 双向记录，登录时自动下发；请求须对方在线，同意/拒绝即时通知双方 |
-| 私聊路由 | 校验好友关系 + 在线状态后转发；服务器界面按 `(用户名：消息)` 全量留底 |
-| 用户管理 | 管理员界面可直接添加用户、删除选中用户（删除会踢下线、清除好友关系、重写账号文件） |
-| 消息记录 | 所有用户发出的消息都在服务器界面留痕 |
+| 账号体系 | 密码只存 **SHA-256** 摘要；首次连库自动建库建表，并把老的 `users.txt` / `friends.txt` 迁移进去 |
+| 好友关系 | `friends` 表双向记录（按对方去重统计），登录时自动下发；请求须对方在线，同意/拒绝即时通知双方 |
+| 私聊路由 | 校验好友关系 + 在线状态后转发；服务器界面按 `(用户名：消息)` 全量留底，同时写 `messages` 表 |
+| 用户管理 | **QTableView 管理面板**（数据来自 MySQL，按用户名模糊查询，增删/上下线/发消息实时刷新）；添加用户、删除选中用户（踢下线 + 清除好友关系） |
 
 ### 客户端（TCPClient）
 
@@ -156,21 +163,28 @@ windeployqt --compiler-runtime TCPServer.exe
 windeployqt --compiler-runtime TCPClient.exe
 ```
 
-## 数据文件
+## 数据存储（v1.1.0 起为 MySQL）
 
-首次运行在 **exe 同目录** 生成，均不入库：
+服务端把数据存进 MySQL（库 `tcp_chat`，表 `users` / `messages` / `friends`，
+详见 [TCPServer/README.md](TCPServer/README.md) 与 [TCPServer/sql/schema.sql](TCPServer/sql/schema.sql)）：
 
-| 文件 | 内容 |
-|---|---|
-| `users.txt` | `用户名\|密码的SHA-256` |
-| `friends.txt` | `用户名\|好友1,好友2` |
+- 界面顶栏可改主机 / 端口 / 库名 / 账号密码，`QSettings` 记忆，支持环境变量覆盖
+- 首次连库自动 `CREATE DATABASE` / `CREATE TABLE IF NOT EXISTS`
+- 老版本的 `users.txt` / `friends.txt`（如存在）会在首次连库时自动迁移进数据库
+
+**Windows 侧 Qt 官方包不含 MySQL 驱动**，需安装社区预编译版
+`thecodemonkey86/qt_mysql_driver`，且 exe 旁必须同时有
+`libmysql.dll` / `libcrypto-3-x64.dll` / `libssl-3-x64.dll` 和
+`sqldrivers\qsqlmysql.dll`——本项目 CMake 已做成构建后自动部署，
+原理与排障见 [TCPServer/README.md](TCPServer/README.md) 的
+「Driver not loaded 怎么来的」一节。发布包内已内置全部运行库。
 
 ## 已知限制
 
 - 密码未加盐，学习项目够用；生产环境应改用 bcrypt/Argon2 并加盐
 - 好友请求只存内存（`m_pendingReq`），对方离线时无法发起
 - 无 TLS、无管理员鉴权：服务端管理界面是本机 GUI 操作，不开放远程管理
-- 端口 6666 硬编码在服务端代码中
+- 服务端监听端口默认 6666；MySQL 连接参数在界面顶栏可改（`QSettings` 持久化）
 
 ## License
 

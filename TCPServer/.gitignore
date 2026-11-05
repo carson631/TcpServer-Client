@@ -82,3 +82,7 @@ CMakeLists.txt.user*
 .uic/
 /build*/
 /.qtcreator/
+
+# 构建产物与打包目录
+/dist/
+docs/*.tmp

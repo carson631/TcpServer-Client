@@ -6,14 +6,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>880</width>
-    <height>640</height>
+    <width>1180</width>
+    <height>780</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>760</width>
-    <height>580</height>
+    <width>1020</width>
+    <height>660</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -48,21 +48,41 @@ QPushButton:pressed { background: #1d39c4; }
 QPushButton:disabled { background: #c3c9e8; color: #f4f5fb; }
 QPushButton#deleteUserButton { background: #d4380d; }
 QPushButton#deleteUserButton:hover { background: #e64a19; }
-QLineEdit, QTextEdit, QListWidget {
+QPushButton#queryUserButton { background: #13a8a8; }
+QPushButton#queryUserButton:hover { background: #19bcbc; }
+QLineEdit, QTextEdit, QSpinBox {
   border: 1px solid #d6d9e4;
   border-radius: 5px;
-  padding: 3px 5px;
+  padding: 4px 6px;
   background: #ffffff;
   selection-background-color: #2f54eb;
 }
-QLineEdit:focus, QTextEdit:focus, QListWidget:focus { border: 1px solid #2f54eb; }
-QListWidget::item { padding: 4px; }
-QListWidget::item:selected { background: #e6ebff; color: #1d39c4; }
-QTextEdit { font-family: &quot;Microsoft YaHei&quot;; font-size: 10pt; }
-QListWidget#userList { font-weight: normal; color: #333333; }</string>
+QLineEdit:focus, QTextEdit:focus, QSpinBox:focus { border: 1px solid #2f54eb; }
+QLineEdit[readOnly="true"] { background: #f0f2f7; }
+QTextEdit { font-family: &quot;Microsoft YaHei&quot;, &quot;Consolas&quot;; font-size: 10pt; }
+QTableView {
+  border: 1px solid #d6d9e4;
+  border-radius: 6px;
+  background: #ffffff;
+  gridline-color: #eef0f5;
+  selection-background-color: #e6ebff;
+  selection-color: #1d39c4;
+}
+QTableView::item { padding: 4px 6px; }
+QHeaderView::section {
+  background: #f0f3fb;
+  color: #1d39c4;
+  border: none;
+  border-right: 1px solid #e2e6f0;
+  border-bottom: 1px solid #d6d9e4;
+  padding: 6px 6px;
+  font-weight: bold;
+}
+QLabel#dbStatusLabel { color: #8c8c8c; }
+QLabel#statsLabel { color: #595959; }</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QVBoxLayout" name="mainLayout" stretch="0,0,1">
+   <layout class="QVBoxLayout" name="mainLayout" stretch="0,0,0,1">
     <property name="leftMargin">
      <number>14</number>
     </property>
@@ -89,6 +109,117 @@ QListWidget#userList { font-weight: normal; color: #333333; }</string>
      </widget>
     </item>
     <item>
+     <widget class="QGroupBox" name="dbGroup">
+      <property name="title">
+       <string>数据库（MySQL）</string>
+      </property>
+      <layout class="QGridLayout" name="dbGrid" columnstretch="0,1,0,0,0,1">
+       <property name="horizontalSpacing">
+        <number>8</number>
+       </property>
+       <property name="verticalSpacing">
+        <number>6</number>
+       </property>
+       <item row="0" column="0">
+        <widget class="QLabel" name="dbHostLabel">
+         <property name="text">
+          <string>主机：</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QLineEdit" name="dbHostEdit">
+         <property name="text">
+          <string>192.168.5.50</string>
+         </property>
+         <property name="placeholderText">
+          <string>MySQL 服务器 IP</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="2">
+        <widget class="QLabel" name="dbPortLabel">
+         <property name="text">
+          <string>端口：</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="3">
+        <widget class="QSpinBox" name="dbPortSpin">
+         <property name="minimum">
+          <number>1</number>
+         </property>
+         <property name="maximum">
+          <number>65535</number>
+         </property>
+         <property name="value">
+          <number>3306</number>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="4">
+        <widget class="QLabel" name="dbNameLabel">
+         <property name="text">
+          <string>数据库：</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="5">
+        <widget class="QLineEdit" name="dbNameEdit">
+         <property name="text">
+          <string>tcp_chat</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="dbUserLabel">
+         <property name="text">
+          <string>账号：</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QLineEdit" name="dbUserEdit">
+         <property name="text">
+          <string>chat</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="2">
+        <widget class="QLabel" name="dbPassLabel">
+         <property name="text">
+          <string>密码：</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="3">
+        <widget class="QLineEdit" name="dbPassEdit">
+         <property name="echoMode">
+          <enum>QLineEdit::Password</enum>
+         </property>
+         <property name="text">
+          <string>chat123456</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="4">
+        <widget class="QPushButton" name="dbConnectButton">
+         <property name="text">
+          <string>连接数据库</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="5">
+        <widget class="QLabel" name="dbStatusLabel">
+         <property name="text">
+          <string>未连接</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item>
      <layout class="QHBoxLayout" name="statusRow" stretch="1,1">
       <property name="spacing">
        <number>10</number>
@@ -96,7 +227,7 @@ QListWidget#userList { font-weight: normal; color: #333333; }</string>
       <item>
        <widget class="QGroupBox" name="clientGroup">
         <property name="title">
-         <string>在线客户端（IP:端口）</string>
+         <string>在线客户端（IP:端口 · 每连接一个线程）</string>
         </property>
         <layout class="QVBoxLayout" name="clientLayout">
          <item>
@@ -104,7 +235,13 @@ QListWidget#userList { font-weight: normal; color: #333333; }</string>
            <property name="minimumSize">
             <size>
              <width>0</width>
-             <height>110</height>
+             <height>96</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>112</height>
             </size>
            </property>
            <property name="readOnly">
@@ -129,7 +266,13 @@ QListWidget#userList { font-weight: normal; color: #333333; }</string>
            <property name="minimumSize">
             <size>
              <width>0</width>
-             <height>110</height>
+             <height>96</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>112</height>
             </size>
            </property>
            <property name="readOnly">
@@ -153,7 +296,7 @@ QListWidget#userList { font-weight: normal; color: #333333; }</string>
       <item>
        <widget class="QGroupBox" name="msgGroup">
         <property name="title">
-         <string>消息记录（所有用户发出的消息）</string>
+         <string>消息记录（同时写入 MySQL messages 表）</string>
         </property>
         <layout class="QVBoxLayout" name="msgLayout">
          <item>
@@ -172,9 +315,9 @@ QListWidget#userList { font-weight: normal; color: #333333; }</string>
       <item>
        <widget class="QGroupBox" name="manageGroup">
         <property name="title">
-         <string>用户管理（管理员）</string>
+         <string>用户管理（管理员 · 数据来自 MySQL）</string>
         </property>
-        <layout class="QVBoxLayout" name="manageLayout" stretch="0,0,1,0">
+        <layout class="QVBoxLayout" name="manageLayout" stretch="0,0,0,1,0">
          <property name="spacing">
           <number>8</number>
          </property>
@@ -184,7 +327,7 @@ QListWidget#userList { font-weight: normal; color: #333333; }</string>
             <number>8</number>
            </property>
            <property name="verticalSpacing">
-            <number>8</number>
+            <number>6</number>
            </property>
            <item row="0" column="0">
             <widget class="QLabel" name="regUserLabel">
@@ -227,21 +370,71 @@ QListWidget#userList { font-weight: normal; color: #333333; }</string>
           </widget>
          </item>
          <item>
-          <widget class="QListWidget" name="userList">
+          <layout class="QHBoxLayout" name="queryRow">
+           <property name="spacing">
+            <number>6</number>
+           </property>
+           <item>
+            <widget class="QLineEdit" name="queryUserEdit">
+             <property name="placeholderText">
+              <string>按用户名模糊查询（留空查全部）</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="queryUserButton">
+             <property name="text">
+              <string>查询</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <widget class="QTableView" name="usersTable">
            <property name="minimumSize">
             <size>
              <width>0</width>
-             <height>90</height>
+             <height>150</height>
             </size>
+           </property>
+           <property name="editTriggers">
+            <set>QAbstractItemView::NoEditTriggers</set>
+           </property>
+           <property name="alternatingRowColors">
+            <bool>true</bool>
+           </property>
+           <property name="selectionBehavior">
+            <enum>QAbstractItemView::SelectRows</enum>
+           </property>
+           <property name="sortingEnabled">
+            <bool>true</bool>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="deleteUserButton">
-           <property name="text">
-            <string>删除选中的用户</string>
+          <layout class="QHBoxLayout" name="footRow">
+           <property name="spacing">
+            <number>8</number>
            </property>
-          </widget>
+           <item>
+            <widget class="QPushButton" name="deleteUserButton">
+             <property name="text">
+              <string>删除选中用户</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="statsLabel">
+             <property name="text">
+              <string>—</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </item>
         </layout>
        </widget>
@@ -255,7 +448,7 @@ QListWidget#userList { font-weight: normal; color: #333333; }</string>
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>880</width>
+     <width>1180</width>
      <height>22</height>
     </rect>
    </property>

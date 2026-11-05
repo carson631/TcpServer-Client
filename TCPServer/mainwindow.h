@@ -1,14 +1,15 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QMainWindow>
-#include <QTcpServer>
-#include <QTcpSocket>
-#include <QHostAddress>
-#include <QMessageBox>
-#include <QList>
 #include <QHash>
-#include <QMap>
+#include <QList>
+#include <QMainWindow>
+#include <QStringList>
+
+class MyTcpServer;
+class MyThread;
+class QSqlQueryModel;
+class QTimer;
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -25,36 +26,47 @@ public:
     ~MainWindow() override;
 
 private slots:
-    void newClientHandler();
-    void on_addUserButton_clicked();     // 管理员添加用户
-    void on_deleteUserButton_clicked();  // 管理员删除选中用户
+    // ---- 来自 MyThread 的自定义信号（跨线程，自动走队列连接）----
+    void onNewClient(qintptr socketDescriptor);
+    void onClientConnected(MyThread *thread, const QString &peer);
+    void onClientDisconnected(MyThread *thread, const QString &peer);
+    void onClientLine(MyThread *thread, const QString &line);
+
+    // ---- 界面按钮 ----
+    void on_addUserButton_clicked();      // 管理员添加用户
+    void on_deleteUserButton_clicked();   // 管理员删除选中用户
+    void on_queryUserButton_clicked();    // 查询用户 -> QTableView
+    void on_connectDbButton_clicked();    // 连接 MySQL
 
 private:
-    // 把 m_clients / m_loggedIn 里的内容重新刷到界面上（连接/断开/登录/登出时调用）
+    void initDatabase();                  // 读配置并自动连接
+    void applyDbState(bool ok, const QString &detail);
+    void setupUserTable();                // QTableView + 查询模型
+    void importLegacyFiles();             // users.txt / friends.txt 迁移进数据库
+
     void refreshClientList();
-    void refreshUserList();
-    void refreshUserDbList();               // 把 m_users 的账号名刷到 userList
+    void refreshOnlineList();
+    void refreshUserTable(const QString &keyword = QString());
+    void scheduleTableRefresh();          // 合并短时间内的多次刷新，避免每条消息都重查
 
-    void loadUsers();                       // 启动时从 users.txt 加载账号
-    void saveUser(const QString &user, const QString &hash);   // 注册成功追加写盘
-    void saveUsers();                       // 用户被删除后整体重写 users.txt
-    void loadFriends();                     // 启动时从 friends.txt 加载好友关系
-    void saveFriends();                     // 好友关系变化后整体重写
-    bool areFriends(const QString &a, const QString &b) const;
-    void addFriendPair(const QString &a, const QString &b);    // 双向建立好友关系
-    QTcpSocket *socketByUser(const QString &user) const;       // 用户名 -> 在线连接
-    static QString hashPassword(const QString &password);      // SHA-256 hex
-
-    void handleLine(QTcpSocket *client, const QString &line);  // 处理一条协议行
-    void sendLine(QTcpSocket *client, const QString &line);    // 回一条协议行
+    MyThread *threadByUser(const QString &user) const;
+    static QString hashPassword(const QString &password);
+    void handleLine(MyThread *client, const QString &line);   // 解析一条协议行
+    void sendLine(MyThread *client, const QString &line);
+    void logMessage(const QString &msg);
+    void appendLogLine(const QString &line);   // 写界面 + 可选写文件
+    bool dbReady();
 
     Ui::MainWindow *ui;
-    QTcpServer *server;
-    QList<QTcpSocket *> m_clients;                    // 当前所有在线连接（含未登录）
-    QHash<QTcpSocket *, QString> m_loggedIn;          // 连接 -> 已登录用户名
-    QHash<QTcpSocket *, QByteArray> m_buffers;        // 每个连接的半包缓冲
-    QHash<QTcpSocket *, QStringList> m_pendingReq;    // 连接 -> 待处理的好友请求（发起者名）
-    QMap<QString, QString> m_users;                   // 用户名 -> 密码哈希（users.txt）
-    QMap<QString, QStringList> m_friends;             // 用户名 -> 好友列表（friends.txt）
+    MyTcpServer *m_server = nullptr;
+    QList<MyThread *> m_clients;                 // 所有在线连接（含未登录）
+    QHash<MyThread *, QString> m_loggedIn;       // 连接 -> 已登录用户名
+    QHash<MyThread *, QString> m_peers;          // 连接 -> "ip:port"
+    QHash<MyThread *, QStringList> m_pendingReq; // 连接 -> 待处理的好友请求发起者
+    QSqlQueryModel *m_userModel = nullptr;
+    QTimer *m_tableTimer = nullptr;
+    QTimer *m_dbRetryTimer = nullptr;
+    int m_dbRetry = 0;                    // 启动时连不上数据库的自动重试计数
 };
+
 #endif // MAINWINDOW_H
